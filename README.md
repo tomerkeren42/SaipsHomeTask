@@ -9,12 +9,19 @@ pip install -r requirements.txt
 ```
 ### Usage
 
+images directory tree:
+  images
+    |
+     caseNreference.jpg
+     caseNinspected.jpg
+     ...
+     
 ```
 python main.py 
 optional arguments:
-  -h, --help      show this help message and exit
-  
-  --show-results  activate results figures
+  -h, --help            show this help message and exit
+  -s, --images-source   path to images directory
+  --show-results        activate results figures
 ```
 Usage example
 ```
