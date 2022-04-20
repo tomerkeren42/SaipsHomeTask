@@ -85,7 +85,7 @@ class ImageAligner:
 
 		return np.median(all_delta_x), np.median(all_delta_y)
 
-	def get_delta(self, img_a: np.array, img_b: np.array) -> Tuple[float, float]:
+	def _get_delta(self, img_a: np.array, img_b: np.array):
 		"""
 
 		:param img_a:
@@ -113,10 +113,10 @@ class ImageAligner:
 		# cv2.drawMatches(img_a, kp1, img_b, kp2, knn_matches, img_matches, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 		# cv2.imshow('Good Matches', img_matches)
 		# cv2.waitKey(0)
-		return median_delta_x, median_delta_y
+		self._delta_x =  median_delta_x
+		self._delta_y = median_delta_y
 
-	@staticmethod
-	def align_frames(x: float, y: float, img_a: np.array, img_b: np.array) -> Tuple[np.array, np.array]:
+	def _align_frames(self, img_a: np.array, img_b: np.array) -> Tuple[np.array, np.array]:
 		"""
 
 		:param x:
@@ -125,7 +125,7 @@ class ImageAligner:
 		:param img_b:
 		:return:
 		"""
-		x, y = int(x), int(y)
+		x, y = int(self._delta_x), int(self._delta_y)
 
 		if x > 0:
 			img_b = img_b[:, x:]
@@ -142,3 +142,8 @@ class ImageAligner:
 			img_a = img_a[-y:, :]
 
 		return img_b, img_a
+
+	def align(self, img_a, img_b):
+		self._get_delta(img_b.copy(), img_a.copy())
+		img_a_aligned, img_b_aligned = self._align_frames(img_a, img_b)
+		return img_a_aligned, img_b_aligned
