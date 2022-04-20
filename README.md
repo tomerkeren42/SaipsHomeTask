@@ -10,10 +10,12 @@ pip install -r requirements.txt
 ### Usage
 
 images directory tree:
-  images
-    |
-     caseNreference.jpg
-     caseNinspected.jpg
+
+├── images\
+│   ├── case1ReferenceImage.jpg
+|   ├── case1InspectedImage.jpg
+|   ├── case2ReferenceImage.jpg
+|   ├── case2InspectedImage.jpg
      ...
      
 ```
