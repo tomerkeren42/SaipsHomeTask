@@ -7,6 +7,11 @@
 ```
 pip install -r requirements.txt
 ```
+Note - Can only install open-cv should be enough for this project
+```
+pip install opencv-python
+```
+
 ### Usage
 
 images directory tree:
