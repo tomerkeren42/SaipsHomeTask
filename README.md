@@ -35,9 +35,15 @@ python main.py --show-results
 <table>
   <tr> 
     <td>
-<img src=<enter here image reference>    width="300" height="200">
-<img src=<enter here image inspected>    width="300" height="200">
-<img src=<enter here image results path> width="300" height="200">
-    </td>
- </tr>
+         <tr>
+<img src=examples/Case1.png    width="900" height="300">
+       </tr>
+       <tr>
+         Finding SOME of the defects, while not finding others
+         </tr>
+       <tr>
+<img src=examples/KP.png   width="600" height="300">
+       </tr>
+       <tr>  
+       Example of aligning image by key points
 </table>
