@@ -8,19 +8,23 @@ import pathlib
 import cv2
 import os
 
+
 class DefectsDetector:
+	"""
+	Main detector object
+	"""
 	def __init__(self):
 		self._images: Dict[int, List[str]] = dict()
 		self._image_aligner = ImageAligner()
 		self._discrete_anomaly_finder = AnomalyFindDiscrete()
-		self._show_results = args().show_results
-		self._de_noise_window_size = 10
-		self._de_noise_h = 7
+		self._show_results: bool = bool(args().show_results)
+		self._de_noise_window_size: int = 10
+		self._de_noise_h: int = 7
 
-	def load(self):
+	def load(self) -> None:
 		"""
-
-		:return:
+		Loading images from source directory.
+		Get path from argument parser. Create an int-List[str] dictionary, where integers stands for case #.
 		"""
 
 		path: str = pathlib.PureWindowsPath(args().images_source).as_posix()
@@ -36,10 +40,13 @@ class DefectsDetector:
 			else:
 				self._images[case_number][1] = image
 
-	def _preprocess(self, img):
+	def _preprocess(self, img) -> np.ndarray:
 		"""
-		:param img:
-		:return:
+		Pre Process image -
+			* BGR -> Gray
+			* Non Local Means Denoising
+		:param img: Source image
+		:return: Pre Processed image
 		"""
 		img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 		img = cv2.fastNlMeansDenoising(src=img,
@@ -47,10 +54,14 @@ class DefectsDetector:
 		                               templateWindowSize=self._de_noise_window_size)
 		return img
 
-	def detect(self):
+	def detect(self) -> None:
 		"""
-
-		:return:
+		Main detect function -
+			* Get couple of inspect-reference images from images dictionary
+			* Pre Processes images
+			* Align images
+			* get mask from aligned comparison images
+			* show results
 		"""
 		for images in self._images.values():
 			inspected_path, reference_path = images if "inspect" in images[0] else reversed(images)
@@ -62,9 +73,10 @@ class DefectsDetector:
 
 			mask = self._discrete_anomaly_finder.get_mask(inspected_aligned, reference_aligned)
 			if self._show_results:
-				cv2.imshow("mask", mask)
-				cv2.imshow('inspected', inspected_aligned)
-				cv2.imshow('reference', reference_aligned)
+
+				show = np.hstack((reference_aligned, inspected_aligned, mask))
+				cv2.imshow("reference - inspected - mask", show)
+
 				if cv2.waitKey(0) == ord('q'):
 					cv2.destroyAllWindows()
 					exit(-1)
